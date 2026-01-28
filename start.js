@@ -28,11 +28,11 @@ module.exports = {
           HF_TOKEN: "{{input.hf_token}}"
         },
         message: [
-          "python server.py"
+          "python -m moshi.server --ssl %TEMP%\\personaplex_ssl"
         ],
         on: [{
-          // Monitor for server URL output (localhost)
-          "event": "/http:\\/\\/(?:localhost|127\\.0\\.0\\.1):\\d{2,5}/",
+          // Monitor for server URL output
+          "event": "/https:\\/\\/[\\d\\.]+:\\d{2,5}/",
           "done": true
         }]
       }
