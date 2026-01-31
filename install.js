@@ -46,12 +46,13 @@ module.exports = {
         }
       }
     },
-    // Write token to ENVIRONMENT file
+    // Append token to ENVIRONMENT file
     {
       method: "fs.write",
       params: {
         path: "ENVIRONMENT",
-        text: "HF_TOKEN={{input.HF_TOKEN}}"
+        text: "\n##########################################################################\n#\n# HF_TOKEN\n# Hugging Face token for PersonaPlex model access\n#\n##########################################################################\nHF_TOKEN={{input.HF_TOKEN}}\n",
+        mode: "a"
       }
     },
     {
