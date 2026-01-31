@@ -4,22 +4,23 @@ module.exports = {
     {
       method: "shell.run",
       params: {
-        message: "git clone https://github.com/NVIDIA/personaplex.git app"
+        message: [
+          "git clone https://github.com/NVIDIA/personaplex.git app"
+        ]
       }
     },
-    // Install moshi package (main PersonaPlex package) FIRST
-    // This may install a CPU-only torch version
+    // Install moshi package (main PersonaPlex package) and its requirements FIRST
     {
       method: "shell.run",
       params: {
         venv: "env",
         path: "app",
-        message: "uv pip install moshi/."
+        message: [
+          "uv pip install moshi/."
+        ]
       }
     },
-    // Install PyTorch with CUDA support AFTER requirements
-    // This ensures the correct CUDA-enabled torch version is installed
-    // and overwrites any CPU-only version that moshi may have installed
+    // Install PyTorch with CUDA support and Triton AFTER requirements
     {
       method: "script.start",
       params: {
@@ -27,8 +28,6 @@ module.exports = {
         params: {
           venv: "env",
           path: "app",
-          xformers: false,
-          flashattn: false,
           triton: true
         }
       }
