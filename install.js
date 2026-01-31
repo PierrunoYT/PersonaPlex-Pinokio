@@ -33,10 +33,31 @@ module.exports = {
         }
       }
     },
+    // Prompt for Hugging Face token
+    {
+      method: "input",
+      params: {
+        title: "Hugging Face Token Required",
+        form: [{
+          title: "Hugging Face Token",
+          key: "HF_TOKEN",
+          description: "PersonaPlex requires a Hugging Face token to download the model.\n\n1. Create an account at [huggingface.co](https://huggingface.co)\n2. Accept the license at [nvidia/personaplex-7b-v1](https://huggingface.co/nvidia/personaplex-7b-v1)\n3. Create a Read token in [Settings → Access Tokens](https://huggingface.co/settings/tokens)\n4. Paste your token below:",
+          placeholder: "hf_..."
+        }]
+      }
+    },
+    // Write token to ENVIRONMENT file
+    {
+      method: "fs.write",
+      params: {
+        path: "ENVIRONMENT",
+        text: "HF_TOKEN={{input.HF_TOKEN}}"
+      }
+    },
     {
       method: "notify",
       params: {
-        html: "Installation complete! Before starting, you need to:<br>1. Create a Hugging Face account<br>2. Accept the PersonaPlex model license at <a href='https://huggingface.co/nvidia/personaplex-7b-v1' target='_blank'>huggingface.co/nvidia/personaplex-7b-v1</a><br>3. Create an access token at Hugging Face<br>4. Set HF_TOKEN environment variable<br><br>Note: Install libopus-dev if you encounter audio issues.<br>The model will download on first start."
+        html: "Installation complete! Click <b>Start</b> to launch PersonaPlex.<br><br>The model (14-17GB) will download on first start."
       }
     }
   ]
