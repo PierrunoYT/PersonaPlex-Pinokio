@@ -14,10 +14,10 @@ module.exports = {
       method: "shell.run",
       params: {
         venv: "env",
-        env: { },
+        env: { HF_TOKEN: "{{env.HF_TOKEN}}" },
         path: "app",
         message: [
-          "python -m moshi.server"
+          "python server.py"
         ],
         on: [{
           // Monitor for server URL output (localhost)
