@@ -17,7 +17,7 @@ module.exports = {
         env: { HF_TOKEN: "{{env.HF_TOKEN}}" },
         path: "app",
         message: [
-          "python server.py"
+          "python -m moshi.server"
         ],
         on: [{
           // Monitor for server URL output (localhost)
