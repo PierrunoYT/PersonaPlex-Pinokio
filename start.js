@@ -1,5 +1,13 @@
 module.exports = {
   daemon: true,
+  env: [
+    {
+      key: "HF_TOKEN",
+      title: "Hugging Face Token",
+      description: "PersonaPlex requires a Hugging Face token to download the model.\n\n1. Create an account at [huggingface.co](https://huggingface.co)\n2. Accept the license at [nvidia/personaplex-7b-v1](https://huggingface.co/nvidia/personaplex-7b-v1)\n3. Create a Read token in [Settings → Access Tokens](https://huggingface.co/settings/tokens)\n4. Paste your token below:",
+      host: "huggingface.co"
+    }
+  ],
   run: [
     // Launch PersonaPlex server
     {
