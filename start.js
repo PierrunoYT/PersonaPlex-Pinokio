@@ -25,17 +25,18 @@ module.exports = {
           "python -m moshi.server"
         ],
         on: [{
-          // Monitor for server URL output (localhost)
-          "event": "/http:\\/\\/(?:localhost|127\\.0\\.0\\.1):\\d{2,5}/",
+          // Monitor for server URL output (any host)
+          "event": "/http:\\/\\/[^\\s\\/]+:\\d{2,5}(?=[^\\w]|$)/",
           "done": true
         }]
       }
     },
     // Set the local URL variable for the "Open Web UI" button
+    // Extract port from matched URL and use 127.0.0.1 (0.0.0.0 doesn't work on Windows)
     {
       method: "local.set",
       params: {
-        url: "{{input.event[0]}}"
+        url: "http://127.0.0.1:{{input.event[0].split(':').pop()}}"
       }
     },
     {
