@@ -1,25 +1,12 @@
 module.exports = {
   daemon: true,
   run: [
-    // Prompt for Hugging Face token
-    {
-      method: "input",
-      params: {
-        title: "Hugging Face Token",
-        form: [{
-          title: "Hugging Face Token",
-          key: "HF_TOKEN",
-          description: "PersonaPlex requires a Hugging Face token to download the model.\n\n1. Create an account at huggingface.co\n2. Accept the license at huggingface.co/nvidia/personaplex-7b-v1\n3. Create a Read token in Settings → Access Tokens\n4. Paste your token below:",
-          placeholder: "hf_..."
-        }]
-      }
-    },
-    // Launch PersonaPlex server
+    // Launch PersonaPlex server (uses HF_TOKEN from Settings)
     {
       method: "shell.run",
       params: {
         venv: "env",
-        env: { HF_TOKEN: "{{input.HF_TOKEN}}" },
+        env: { HF_TOKEN: "{{env.HF_TOKEN}}" },
         path: "app",
         message: [
           "python -m moshi.server"
