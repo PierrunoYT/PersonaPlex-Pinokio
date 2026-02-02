@@ -4,6 +4,10 @@ module.exports = {
   title: "PersonaPlex",
   description: "🗣️ PersonaPlex - NVIDIA's real-time speech-to-speech conversational AI model. Natural full-duplex conversations with customizable personas and voices. Requires powerful NVIDIA GPU (16-24GB VRAM), 32GB RAM, and Hugging Face account.",
   icon: "icon.png",
+  env: [{
+    key: "HF_TOKEN",
+    description: "Hugging Face Read token (Settings > Access Tokens)."
+  }],
   menu: async (kernel, info) => {
     let installed = info.exists("app/env")
     let running = {
