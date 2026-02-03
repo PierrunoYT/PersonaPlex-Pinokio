@@ -33,9 +33,15 @@ module.exports = {
       }
     },
     {
-      method: "notify",
+      method: "input",
       params: {
-        html: "Installation complete! Click <b>Start</b> to launch PersonaPlex.<br><br>The model (14-17GB) will download on first start."
+        title: "Installation abgeschlossen",
+        form: [{
+          title: "HF_TOKEN in Settings setzen",
+          key: "ack",
+          description: "Bitte oeffne die Settings und trage dort deinen Hugging Face Read-Token unter HF_TOKEN ein (nicht hier). Dann oeffnet sich das Token-Fenster beim Start nicht jedes Mal.\n\nEinfach OK klicken und danach Start. Das Modell (14-17GB) wird beim ersten Start heruntergeladen.",
+          placeholder: "OK"
+        }]
       }
     }
   ]

@@ -6,12 +6,12 @@ module.exports = {
     key: "HF_TOKEN"
   }],
   run: [
-    // Launch PersonaPlex server
+    // Launch PersonaPlex server (uses HF_TOKEN from Settings)
     {
       method: "shell.run",
       params: {
         venv: "env",
-        env: { HF_TOKEN: "{{input.HF_TOKEN}}" },
+        env: { HF_TOKEN: "{{env.HF_TOKEN}}" },
         path: "app",
         message: [
           "python -m moshi.server"
