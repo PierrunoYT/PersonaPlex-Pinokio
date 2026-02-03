@@ -1,19 +1,11 @@
 module.exports = {
   daemon: true,
+  env: [{
+    title: "Hugging Face Token",
+    description: "PersonaPlex requires a Hugging Face token to download the model.\n\n1. Create an account at huggingface.co\n2. Accept the license at huggingface.co/nvidia/personaplex-7b-v1\n3. Create a Read token in Settings → Access Tokens\n4. Paste your token below:",
+    key: "HF_TOKEN"
+  }],
   run: [
-    // Prompt for Hugging Face token
-    {
-      method: "input",
-      params: {
-        title: "Hugging Face Token",
-        form: [{
-          title: "Hugging Face Token",
-          key: "HF_TOKEN",
-          description: "PersonaPlex requires a Hugging Face token to download the model.\n\n1. Create an account at huggingface.co\n2. Accept the license at huggingface.co/nvidia/personaplex-7b-v1\n3. Create a Read token in Settings → Access Tokens\n4. Paste your token below:",
-          placeholder: "hf_..."
-        }]
-      }
-    },
     // Launch PersonaPlex server
     {
       method: "shell.run",
@@ -25,14 +17,13 @@ module.exports = {
           "python -m moshi.server"
         ],
         on: [{
-          // Monitor for server URL output (any host)
+          // Monitor for server URL output (localhost)
           "event": "/http:\\/\\/[^\\s\\/]+:\\d{2,5}(?=[^\\w]|$)/",
           "done": true
         }]
       }
     },
     // Set the local URL variable for the "Open Web UI" button
-    // Extract port from matched URL and use 127.0.0.1 (0.0.0.0 doesn't work on Windows)
     {
       method: "local.set",
       params: {
