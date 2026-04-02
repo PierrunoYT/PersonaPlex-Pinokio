@@ -11,7 +11,7 @@ PersonaPlex is NVIDIA's state-of-the-art real-time speech-to-speech conversation
   - Recommended: 24 GB VRAM or more
 - **RAM**: At least 32 GB
 - **Storage**: Approx. 50 GB free SSD space
-- **Operating System**: Windows 10/11 64-bit
+- **Operating System**: Windows 10/11 64-bit or modern 64-bit Linux
 - **Driver**: Current NVIDIA graphics driver
 - **CUDA**: CUDA Toolkit 12.x (installed automatically)
 
@@ -51,7 +51,7 @@ setx HF_TOKEN your_token_here
 2. **Find PersonaPlex**: Search for "PersonaPlex" in the Pinokio Store
 3. **Click Install**: The installation process runs automatically:
    - PersonaPlex repository is cloned
-   - Python virtual environment is created
+   - Python virtual environment is created or refreshed
    - PyTorch with CUDA 12.x support is installed
    - All dependencies are installed
    - Audio libraries (sounddevice, pyaudio) are added
@@ -63,6 +63,7 @@ Installation takes 10-20 minutes depending on your internet connection.
 ### Starting the Server
 
 1. **Click Start** in Pinokio
+   - PersonaPlex currently supports NVIDIA GPUs on Windows or Linux only
 2. **First Start**: The model (14-17 GB) will automatically download from Hugging Face
    - This can take 10-30 minutes
    - Download only happens once
@@ -129,6 +130,15 @@ Installation takes 10-20 minutes depending on your internet connection.
 - Check terminal output in Pinokio
 - Close other Python processes
 - Run "Reset" in Pinokio and reinstall
+
+### Update Doesn't Change the App
+
+**Problem**: You clicked Update but PersonaPlex still behaves the same
+
+**Solution**:
+- Update now refreshes both the launcher and the checked-out `app` repository
+- It also reinstalls the packaged PersonaPlex Python dependencies and CUDA wheels
+- If you still have stale behavior after updating, use "Reset" and then reinstall
 
 ## Performance Tips
 

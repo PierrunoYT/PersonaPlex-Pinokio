@@ -2,6 +2,7 @@ module.exports = {
   run: [
     // Clone PersonaPlex repository from GitHub
     {
+      when: "{{!exists('app')}}",
       method: "shell.run",
       params: {
         message: [

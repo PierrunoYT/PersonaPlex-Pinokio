@@ -18,7 +18,7 @@ module.exports = {
         ],
         on: [{
           // Monitor for server URL output (localhost)
-          "event": "/http:\\/\\/[^\\s\\/]+:\\d{2,5}(?=[^\\w]|$)/",
+          "event": "/(http:\\/\\/[^\\s\\/]+:\\d{2,5}(?=[^\\w]|$))/",
           "done": true
         }]
       }
@@ -27,7 +27,7 @@ module.exports = {
     {
       method: "local.set",
       params: {
-        url: "http://127.0.0.1:{{input.event[0].split(':').pop()}}"
+        url: "{{input.event[1]}}"
       }
     },
     {

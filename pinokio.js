@@ -1,8 +1,7 @@
-const path = require('path')
 module.exports = {
   version: "5.0",
   title: "PersonaPlex",
-  description: "🗣️ PersonaPlex - NVIDIA's real-time speech-to-speech conversational AI model. Natural full-duplex conversations with customizable personas and voices. Requires powerful NVIDIA GPU (16-24GB VRAM), 32GB RAM, and Hugging Face account.",
+  description: "🗣️ PersonaPlex - NVIDIA's real-time speech-to-speech conversational AI model. Natural full-duplex conversations with customizable personas and voices. Requires an NVIDIA GPU on Windows or Linux (16-24GB VRAM recommended), 32GB RAM, and a Hugging Face account.",
   icon: "icon.jpg",
   env: [{
     key: "HF_TOKEN",
@@ -77,10 +76,6 @@ module.exports = {
           icon: "fa-solid fa-plug",
           text: "Update",
           href: "update.js",
-        }, {
-          icon: "fa-solid fa-plug",
-          text: "Install",
-          href: "install.js",
         }, {
           icon: "fa-solid fa-file-zipper",
           text: "<div><strong>Save Disk Space</strong><div>Deduplicates redundant library files</div></div>",
