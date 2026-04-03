@@ -17,8 +17,8 @@ module.exports = {
           "python -m moshi.server"
         ],
         on: [{
-          // Monitor for server URL output (localhost)
-          "event": "/(http:\\/\\/[^\\s\\/]+:\\d{2,5}(?=[^\\w]|$))/",
+          // Match first http(s) URL printed by the server (same pattern as system/examples/moshi/start.js)
+          "event": "/https?:\\/\\/\\S+/",
           "done": true
         }]
       }
@@ -27,7 +27,7 @@ module.exports = {
     {
       method: "local.set",
       params: {
-        url: "{{input.event[1]}}"
+        url: "{{input.event[0]}}"
       }
     },
     {

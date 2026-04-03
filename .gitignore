@@ -1,0 +1,5 @@
+# Cloned upstream app and Pinokio-managed venv (see gepeto project structure)
+app/
+env/
+
+.DS_Store
