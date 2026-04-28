@@ -131,6 +131,15 @@ Installation takes 10-20 minutes depending on your internet connection.
 - Close other Python processes
 - Run "Reset" in Pinokio and reinstall
 
+### Windows Triton/Inductor Error
+
+**Problem**: Startup fails during model warmup with `torch._inductor.exc.InductorError: SystemError: PY_SSIZE_T_CLEAN macro must be defined for '#' formats`
+
+**Solution**:
+- Update this launcher, then start PersonaPlex again
+- The Windows launch path disables Moshi's `torch.compile` integration with `NO_TORCH_COMPILE=1` to avoid the failing Triton code generation path
+- If the error persists, reset and reinstall so PyTorch/Triton caches are rebuilt
+
 ### Update Doesn't Change the App
 
 **Problem**: You clicked Update but PersonaPlex still behaves the same

@@ -11,14 +11,18 @@ module.exports = {
       method: "shell.run",
       params: {
         venv: "env",
-        env: { HF_TOKEN: "{{env.HF_TOKEN}}" },
+        env: {
+          HF_TOKEN: "{{env.HF_TOKEN}}",
+          // Avoid Windows Triton/Inductor launcher failures during Moshi warmup.
+          NO_TORCH_COMPILE: "{{platform === 'win32' ? '1' : ''}}"
+        },
         path: "app",
         message: [
           "python -m moshi.server"
         ],
         on: [{
-          // Match first http(s) URL printed by the server (same pattern as system/examples/moshi/start.js)
-          "event": "/https?:\\/\\/\\S+/",
+          // Match first http(s) URL printed by the server.
+          "event": "/(https?:\\/\\/\\S+)/",
           "done": true
         }]
       }
@@ -27,7 +31,7 @@ module.exports = {
     {
       method: "local.set",
       params: {
-        url: "{{input.event[0]}}"
+        url: "{{input.event[1]}}"
       }
     },
     {
