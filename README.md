@@ -35,15 +35,14 @@ PersonaPlex requires access to the model via Hugging Face:
    - Create a new token with "Read" permission
    - Copy the token
 
-### 3. Set Hugging Face Token
+### 3. Provide the Token to Pinokio
 
-Open PowerShell and set the environment variable:
+You do **not** need to set any environment variable manually. The launcher asks for your Hugging Face token directly:
 
-```powershell
-setx HF_TOKEN your_token_here
-```
+- The first time you **Install** or **Start** PersonaPlex, Pinokio prompts for `HF_TOKEN`.
+- Paste your Read token there and it is stored with the app and passed to the server automatically.
 
-⚠️ **Important**: After setting the token, close and reopen PowerShell so the variable becomes available.
+You can update it later via the launcher's environment settings.
 
 ## Installation via Pinokio
 
@@ -52,9 +51,8 @@ setx HF_TOKEN your_token_here
 3. **Click Install**: The installation process runs automatically:
    - PersonaPlex repository is cloned
    - Python virtual environment is created or refreshed
-   - PyTorch with CUDA 12.x support is installed
-   - All dependencies are installed
-   - Audio libraries (sounddevice, pyaudio) are added
+   - The PersonaPlex (moshi) package and its dependencies are installed
+   - PyTorch with CUDA 12.x support (plus Triton) is installed
 
 Installation takes 10-20 minutes depending on your internet connection.
 
@@ -71,7 +69,7 @@ Installation takes 10-20 minutes depending on your internet connection.
 
 ### In the Browser
 
-1. **Open URL**: Browser opens automatically (usually `http://localhost:xxxx`)
+1. **Open URL**: Click "Open Web UI"; the server runs locally at `http://localhost:<port>` (Pinokio assigns a free port automatically)
 2. **Allow Microphone Access**: The browser will ask for microphone permission
 3. **Start Conversation**: Speak in English with the model
 4. **Define Personas**: Use text prompts to define roles and characters
@@ -109,9 +107,9 @@ Installation takes 10-20 minutes depending on your internet connection.
 **Problem**: HF_TOKEN not set or license not accepted
 
 **Solution**:
-- Check if HF_TOKEN is set: `echo %HF_TOKEN%` in CMD
-- Ensure license is accepted at [huggingface.co/nvidia/personaplex-7b-v1](https://huggingface.co/nvidia/personaplex-7b-v1)
-- Reset token and restart terminal
+- Re-enter your `HF_TOKEN` in the launcher's environment settings
+- Ensure the license is accepted at [huggingface.co/nvidia/personaplex-7b-v1](https://huggingface.co/nvidia/personaplex-7b-v1)
+- Make sure the token has "Read" permission
 
 ### Microphone Not Working
 

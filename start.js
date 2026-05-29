@@ -18,7 +18,7 @@ module.exports = {
         },
         path: "app",
         message: [
-          "python -m moshi.server"
+          "python -m moshi.server --host localhost --port {{port}}"
         ],
         on: [{
           // Match first http(s) URL printed by the server.
