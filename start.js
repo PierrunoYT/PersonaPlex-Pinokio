@@ -3,10 +3,11 @@ module.exports = {
   env: [{
     title: "Hugging Face Token",
     description: "PersonaPlex requires a Hugging Face token to download the model.\n\n1. Create an account at huggingface.co\n2. Accept the license at huggingface.co/nvidia/personaplex-7b-v1\n3. Create a Read token in Settings → Access Tokens\n4. Paste your token below:",
-    key: "HF_TOKEN"
+    key: "HF_TOKEN",
+    host: "huggingface.co"
   }],
   run: [
-    // Launch PersonaPlex server (uses HF_TOKEN from Settings)
+    // Launch PersonaPlex server (uses HF_TOKEN from Settings / shared key store)
     {
       method: "shell.run",
       params: {
@@ -21,8 +22,8 @@ module.exports = {
           "python -m moshi.server --host localhost --port {{port}}"
         ],
         on: [{
-          // Match first http(s) URL printed by the server.
-          "event": "/(https?:\\/\\/\\S+)/",
+          // Match first http://host:port URL printed by the server (skill's Critical Pattern Lock).
+          "event": "/(http:\\/\\/[0-9.:a-zA-Z\\-]+)/",
           "done": true
         }]
       }

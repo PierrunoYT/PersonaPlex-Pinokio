@@ -1,5 +1,12 @@
 module.exports = {
   run: [
+    // Install Rust toolchain (required to build moshi's native deps, e.g. sentencepiece)
+    {
+      method: "shell.run",
+      params: {
+        message: "conda install -y -c conda-forge rust"
+      }
+    },
     // Clone PersonaPlex repository from GitHub
     {
       when: "{{!exists('app')}}",

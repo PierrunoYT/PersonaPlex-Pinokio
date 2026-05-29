@@ -1,16 +1,9 @@
 {
-  "links": [
-    {
-      "title": "GitHub",
-      "value": "https://github.com/NVIDIA/personaplex"
-    },
-    {
-      "title": "Hugging Face Model",
-      "value": "https://huggingface.co/nvidia/personaplex-7b-v1"
-    },
-    {
-      "title": "NVIDIA Research",
-      "value": "https://research.nvidia.com/labs/adlr/personaplex/"
-    }
-  ]
+  "title": "PersonaPlex",
+  "description": "🗣️ PersonaPlex - NVIDIA's real-time speech-to-speech conversational AI model. Natural full-duplex conversations with customizable personas and voices. Requires an NVIDIA GPU on Windows or Linux (16-24GB VRAM recommended), 32GB RAM, and a Hugging Face account.",
+  "icon": "icon.jpg",
+  "links": [],
+  "posts": [],
+  "gpu": ["nvidia"],
+  "platform": ["win32", "linux"]
 }

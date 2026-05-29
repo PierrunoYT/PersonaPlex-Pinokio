@@ -1,10 +1,9 @@
+// title, description, and icon live in pinokio.json (canonical metadata).
 module.exports = {
   version: "5.0",
-  title: "PersonaPlex",
-  description: "🗣️ PersonaPlex - NVIDIA's real-time speech-to-speech conversational AI model. Natural full-duplex conversations with customizable personas and voices. Requires an NVIDIA GPU on Windows or Linux (16-24GB VRAM recommended), 32GB RAM, and a Hugging Face account.",
-  icon: "icon.jpg",
   env: [{
     key: "HF_TOKEN",
+    host: "huggingface.co",
     description: "Hugging Face Read token (Settings > Access Tokens)."
   }],
   menu: async (kernel, info) => {
