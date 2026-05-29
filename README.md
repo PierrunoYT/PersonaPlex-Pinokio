@@ -74,6 +74,42 @@ Installation takes 10-20 minutes depending on your internet connection.
 3. **Start Conversation**: Speak in English with the model
 4. **Define Personas**: Use text prompts to define roles and characters
 
+## Programmatic Access
+
+PersonaPlex is launched with `python -m moshi.server --host localhost --port <port>`. Pinokio captures the printed local URL and exposes it through the "Open Web UI" button. The upstream server is primarily intended for browser-based real-time audio interaction; this launcher does not define additional custom REST endpoints.
+
+Use the examples below to verify that the local server is reachable. Replace `http://localhost:<port>` with the URL shown by Pinokio after startup.
+
+### Curl
+
+```bash
+curl http://localhost:<port>/
+```
+
+### Python
+
+```python
+import requests
+
+base_url = "http://localhost:<port>"
+response = requests.get(f"{base_url}/", timeout=30)
+response.raise_for_status()
+print(response.text[:500])
+```
+
+### JavaScript
+
+```javascript
+const baseUrl = "http://localhost:<port>";
+
+const response = await fetch(`${baseUrl}/`);
+if (!response.ok) {
+  throw new Error(`Request failed: ${response.status}`);
+}
+
+console.log((await response.text()).slice(0, 500));
+```
+
 ## Features
 
 - 🗣️ **Real-time Speech-to-Speech**: Natural, flowing conversations
