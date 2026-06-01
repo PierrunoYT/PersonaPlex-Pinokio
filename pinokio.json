@@ -1,5 +1,7 @@
 {
   "title": "PersonaPlex",
   "description": "🗣️ PersonaPlex - NVIDIA's real-time speech-to-speech conversational AI model. Natural full-duplex conversations with customizable personas and voices.",
-  "icon": "icon.png"
+  "icon": "icon.png",
+  "gpu": ["nvidia"],
+  "platform": ["win32", "linux"]
 }

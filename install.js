@@ -1,4 +1,7 @@
 module.exports = {
+  requires: {
+    bundle: "ai"
+  },
   run: [
     // Install Rust toolchain (required to build moshi's native deps, e.g. sentencepiece)
     {
