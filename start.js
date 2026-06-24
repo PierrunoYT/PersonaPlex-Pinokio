@@ -15,7 +15,8 @@ module.exports = {
         env: {
           HF_TOKEN: "{{env.HF_TOKEN}}",
           // Avoid Windows Triton/Inductor launcher failures during Moshi warmup.
-          NO_TORCH_COMPILE: "{{platform === 'win32' ? '1' : ''}}"
+          NO_TORCH_COMPILE: "{{platform === 'win32' ? '1' : ''}}",
+          TORCH_COMPILE_DISABLE: "{{platform === 'win32' ? '1' : ''}}"
         },
         path: "app",
         message: [

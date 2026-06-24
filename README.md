@@ -171,7 +171,7 @@ console.log((await response.text()).slice(0, 500));
 
 **Solution**:
 - Update this launcher, then start PersonaPlex again
-- The Windows launch path disables Moshi's `torch.compile` integration with `NO_TORCH_COMPILE=1` to avoid the failing Triton code generation path
+- The Windows launch path disables Moshi/PyTorch compile integration with `NO_TORCH_COMPILE=1` and `TORCH_COMPILE_DISABLE=1` to avoid the failing Triton code generation path
 - If the error persists, reset and reinstall so PyTorch/Triton caches are rebuilt
 
 ### Update Doesn't Change the App
