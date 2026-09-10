@@ -13,7 +13,7 @@ PersonaPlex is NVIDIA's state-of-the-art real-time speech-to-speech conversation
 - **Storage**: Approx. 50 GB free SSD space
 - **Operating System**: Windows 10/11 64-bit or modern 64-bit Linux
 - **Driver**: Current NVIDIA graphics driver
-- **CUDA**: CUDA Toolkit 12.x (installed automatically)
+- **CUDA runtime**: CUDA 12.8 libraries are installed with PyTorch. The launcher does not install the full CUDA Toolkit; a compatible NVIDIA driver is required.
 
 ## Before Installation
 
@@ -52,7 +52,9 @@ You can update it later via the launcher's environment settings.
    - PersonaPlex repository is cloned
    - Python virtual environment is created or refreshed
    - The PersonaPlex (moshi) package and its dependencies are installed
-   - PyTorch with CUDA 12.x support (plus Triton) is installed
+   - PyTorch 2.7.0 with CUDA 12.8 support (plus matching Triton) is installed
+   - Linux audio libraries (Opus and PortAudio) are installed through Conda
+   - Runtime imports and the PyTorch build are verified before Start becomes available
 
 Installation takes 10-20 minutes depending on your internet connection.
 
@@ -69,21 +71,21 @@ Installation takes 10-20 minutes depending on your internet connection.
 
 ### In the Browser
 
-1. **Open URL**: Click "Open Web UI"; the server runs locally at `http://localhost:<port>` (Pinokio assigns a free port automatically)
+1. **Open URL**: Click "Open Web UI"; the server runs locally at `http://127.0.0.1:<port>` (Pinokio assigns a free port automatically)
 2. **Allow Microphone Access**: The browser will ask for microphone permission
 3. **Start Conversation**: Speak in English with the model
 4. **Define Personas**: Use text prompts to define roles and characters
 
 ## Programmatic Access
 
-PersonaPlex is launched with `python -m moshi.server --host localhost --port <port>`. Pinokio captures the printed local URL and exposes it through the "Open Web UI" button. The upstream server is primarily intended for browser-based real-time audio interaction; this launcher does not define additional custom REST endpoints.
+The launcher runs `python ../launch.py --host 127.0.0.1 --port <port>` from the `app` folder. This wrapper runs `moshi.server` and ensures aiohttp actually binds to loopback: upstream currently parses `--host` without passing it to `web.run_app`. Pinokio waits for aiohttp's ready message before exposing the "Open Web UI" button. The upstream server is primarily intended for browser-based real-time audio interaction; this launcher does not define additional custom REST endpoints.
 
-Use the examples below to verify that the local server is reachable. Replace `http://localhost:<port>` with the URL shown by Pinokio after startup.
+Use the examples below to verify that the local server is reachable. Replace `PORT` with the port shown by Pinokio after startup.
 
 ### Curl
 
 ```bash
-curl http://localhost:<port>/
+curl "http://127.0.0.1:PORT/"
 ```
 
 ### Python
@@ -91,7 +93,7 @@ curl http://localhost:<port>/
 ```python
 import requests
 
-base_url = "http://localhost:<port>"
+base_url = "http://127.0.0.1:PORT"
 response = requests.get(f"{base_url}/", timeout=30)
 response.raise_for_status()
 print(response.text[:500])
@@ -100,7 +102,7 @@ print(response.text[:500])
 ### JavaScript
 
 ```javascript
-const baseUrl = "http://localhost:<port>";
+const baseUrl = "http://127.0.0.1:PORT";
 
 const response = await fetch(`${baseUrl}/`);
 if (!response.ok) {
@@ -126,7 +128,7 @@ console.log((await response.text()).slice(0, 500));
 
 **Solution**:
 - Update NVIDIA driver
-- Install CUDA Toolkit 12.x manually
+- Run Repair Installation to restore the CUDA-enabled PyTorch build
 - Restart system
 
 ### Out-of-Memory Error
@@ -136,7 +138,7 @@ console.log((await response.text()).slice(0, 500));
 **Solution**:
 - Close other GPU-intensive programs (browser with many tabs, games, etc.)
 - Check GPU usage (Task Manager → Performance → GPU)
-- If VRAM is consistently over 90%, the GPU is too weak
+- If allocation still fails, use a GPU with more available VRAM; high utilization alone does not indicate a failure
 
 ### Model Not Downloading
 
@@ -153,7 +155,7 @@ console.log((await response.text()).slice(0, 500));
 
 **Solution**:
 - Browser Settings → Privacy → Microphone
-- Allow access for localhost URL
+- Allow access for the `127.0.0.1` URL shown by Pinokio
 - Reload browser
 
 ### Server Won't Start
@@ -162,8 +164,9 @@ console.log((await response.text()).slice(0, 500));
 
 **Solution**:
 - Check terminal output in Pinokio
-- Close other Python processes
-- Run "Reset" in Pinokio and reinstall
+- Stop this app in Pinokio and start it again
+- Run "Repair Installation" (or "Install" after an incomplete installation)
+- If the checkout is damaged, use "Reset" and reinstall; this removes the app checkout and virtual environment
 
 ### Windows Triton/Inductor Error
 
@@ -172,7 +175,15 @@ console.log((await response.text()).slice(0, 500));
 **Solution**:
 - Update this launcher, then start PersonaPlex again
 - The Windows launch path disables Moshi/PyTorch compile integration with `NO_TORCH_COMPILE=1` and `TORCH_COMPILE_DISABLE=1` to avoid the failing Triton code generation path
-- If the error persists, reset and reinstall so PyTorch/Triton caches are rebuilt
+- If the error persists, inspect the terminal traceback and repair the installation. Reset removes the checkout and virtual environment but does not clear caches stored elsewhere.
+
+### Install Appears Again After Updating the Launcher
+
+Older installations have no runtime verification marker. Click Install once to refresh and verify the existing checkout; it is not cloned again. A failed verification keeps Start hidden and leaves Install and Reset available for recovery.
+
+### Dependency Checks Report a PyTorch Conflict
+
+Upstream's [package metadata](https://github.com/NVIDIA/personaplex/blob/main/moshi/pyproject.toml) currently declares `torch<2.5`. This launcher retains its existing PyTorch 2.7.0/CUDA 12.8 override for newer GPUs, so `pip check` or `uv pip check` can report that metadata conflict. The final install check verifies runtime imports and the selected CUDA build; it does not prove model inference works on every GPU. Do not run a general dependency synchronization command after installation, since it can replace the launcher's CUDA build.
 
 ### Update Doesn't Change the App
 
@@ -188,7 +199,18 @@ console.log((await response.text()).slice(0, 500));
 - **GPU Driver**: Always keep up to date
 - **Background Programs**: Close for best performance
 - **Storage Space**: Keep at least 50 GB free
-- **VRAM Monitoring**: If consistently 90%+ usage, reduce quality
+- **VRAM Monitoring**: If allocation fails, free GPU memory or use a GPU with more VRAM
+
+## Launcher Development
+
+Run the dependency-free regression checks from the repository root:
+
+```bash
+node --test tests/launcher.test.js
+python -m unittest discover -s tests -v
+```
+
+These checks cover URL readiness, loopback enforcement, menu recovery, template evaluation, and installation verification. A full smoke test additionally requires Pinokio, an NVIDIA GPU, model access, and a model download. Reset retains model caches outside `app`.
 
 ## Links
 
