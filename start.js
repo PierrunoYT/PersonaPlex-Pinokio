@@ -13,18 +13,17 @@ module.exports = {
       params: {
         venv: "env",
         env: {
-          HF_TOKEN: "{{env.HF_TOKEN}}",
           // Avoid Windows Triton/Inductor launcher failures during Moshi warmup.
           NO_TORCH_COMPILE: "{{platform === 'win32' ? '1' : ''}}",
           TORCH_COMPILE_DISABLE: "{{platform === 'win32' ? '1' : ''}}"
         },
         path: "app",
         message: [
-          "python -m moshi.server --host localhost --port {{port}}"
+          "python ../launch.py --host 127.0.0.1 --port {{port}}"
         ],
         on: [{
-          // Match first http://host:port URL printed by the server (skill's Critical Pattern Lock).
-          "event": "/(http:\\/\\/[0-9.:a-zA-Z\\-]+)/",
+          // Wait for aiohttp to bind; upstream logs an access URL before it is ready.
+          "event": "/Running on (http:\\/\\/[0-9.:]+)/",
           "done": true
         }]
       }
