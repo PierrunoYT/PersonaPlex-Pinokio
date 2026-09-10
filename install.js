@@ -12,6 +12,17 @@ module.exports = {
       },
       next: null
     },
+    // A venv directory alone is not evidence of a completed installation.
+    {
+      when: "{{exists('app/env/.personaplex-installed')}}",
+      method: "fs.rm",
+      params: { path: "app/env/.personaplex-installed" }
+    },
+    {
+      when: "{{platform === 'linux'}}",
+      method: "shell.run",
+      params: { message: "conda install -y -c conda-forge opus portaudio" }
+    },
     // Install Rust toolchain (required to build moshi's native deps, e.g. sentencepiece)
     {
       when: "{{!which('cargo')}}",
@@ -27,7 +38,8 @@ module.exports = {
       params: {
         message: [
           "git clone https://github.com/NVIDIA/personaplex.git app"
-        ]
+        ],
+        on: [{ event: "/fatal:|error:/i", break: true }]
       }
     },
     // Install moshi package (main PersonaPlex package) and its requirements
@@ -42,7 +54,7 @@ module.exports = {
         on: [{
           // Stop with an error screen if the native build fails (e.g. sentencepiece),
           // instead of continuing to the torch install over a broken environment.
-          event: "/Failed to build|No solution found/i",
+          event: "/error:|Failed to build|No solution found/i",
           break: true
         }]
       }
@@ -57,6 +69,14 @@ module.exports = {
           path: "app",
           triton: true
         }
+      }
+    },
+    {
+      method: "shell.run",
+      params: {
+        venv: "env",
+        path: "app",
+        message: "python ../verify_install.py"
       }
     }
   ]

@@ -7,7 +7,7 @@ module.exports = {
     description: "Hugging Face Read token (Settings > Access Tokens)."
   }],
   menu: async (kernel, info) => {
-    let installed = info.exists("app/env")
+    let installed = info.exists("app/env/.personaplex-installed")
     let running = {
       install: info.running("install.js"),
       start: info.running("start.js"),
@@ -15,12 +15,17 @@ module.exports = {
       reset: info.running("reset.js"),
       link: info.running("link.js")
     }
-    if (running.install) {
+    // Keep maintenance visible even while it removes or invalidates the venv.
+    const maintenance = [
+      ['install', 'Installing'], ['update', 'Updating'],
+      ['reset', 'Resetting'], ['link', 'Deduplicating']
+    ].find(([script]) => running[script])
+    if (maintenance) {
       return [{
         default: true,
         icon: "fa-solid fa-plug",
-        text: "Installing",
-        href: "install.js",
+        text: maintenance[1],
+        href: `${maintenance[0]}.js`,
       }]
     } else if (installed) {
       if (running.start) {
@@ -44,27 +49,6 @@ module.exports = {
             href: "start.js",
           }]
         }
-      } else if (running.update) {
-        return [{
-          default: true,
-          icon: 'fa-solid fa-terminal',
-          text: "Updating",
-          href: "update.js",
-        }]
-      } else if (running.reset) {
-        return [{
-          default: true,
-          icon: 'fa-solid fa-terminal',
-          text: "Resetting",
-          href: "reset.js",
-        }]
-      } else if (running.link) {
-        return [{
-          default: true,
-          icon: 'fa-solid fa-terminal',
-          text: "Deduplicating",
-          href: "link.js",
-        }]
       } else {
         return [{
           default: true,
@@ -75,6 +59,10 @@ module.exports = {
           icon: "fa-solid fa-plug",
           text: "Update",
           href: "update.js",
+        }, {
+          icon: "fa-solid fa-plug",
+          text: "Repair Installation",
+          href: "install.js",
         }, {
           icon: "fa-solid fa-file-zipper",
           text: "<div><strong>Save Disk Space</strong><div>Deduplicates redundant library files</div></div>",
@@ -88,12 +76,21 @@ module.exports = {
         }]
       }
     } else {
-      return [{
+      const menu = [{
         default: true,
         icon: "fa-solid fa-plug",
         text: "Install",
         href: "install.js",
       }]
+      if (info.exists("app")) {
+        menu.push({
+          icon: "fa-regular fa-circle-xmark",
+          text: "Reset",
+          href: "reset.js",
+          confirm: "Remove the app checkout and virtual environment? Model caches outside app are retained."
+        })
+      }
+      return menu
     }
   }
 }
