@@ -47,7 +47,7 @@ module.exports = {
     {
       method: "notify",
       params: {
-        html: "PersonaPlex is running! Click 'Open Web UI' to start conversing. Allow microphone access in your browser. Model download (14-17GB) will happen on first start if not cached."
+        html: "PersonaPlex is running! Click 'Open Web UI' to start conversing. Allow microphone access in your browser."
       }
     }
   ]
