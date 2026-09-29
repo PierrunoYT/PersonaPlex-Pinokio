@@ -14,6 +14,19 @@ test('startup waits for the bound listener and captures its URL', () => {
   assert.equal(start.daemon, true)
 })
 
+test('startup stops without a ready URL when the server exits early', () => {
+  const vm = require('node:vm')
+  const start = require('../start')
+  const shellIndex = start.run.findIndex(step => step.method === 'shell.run')
+  const guard = start.run[shellIndex + 1]
+  const skipped = input => !vm.runInNewContext(guard.when.slice(2, -2), { input })
+  assert.equal(guard.next, null)
+  assert.equal(skipped(undefined), false)
+  assert.equal(skipped({ stdout: 'Traceback' }), false)
+  assert.equal(skipped({ event: ['Running on http://127.0.0.1:8123', 'http://127.0.0.1:8123'] }), true)
+  assert.ok(start.run.findIndex(step => step.method === 'local.set') > shellIndex + 1)
+})
+
 const menu = (paths = [], running = [], local) => require('../pinokio').menu(null, {
   exists: path => paths.includes(path),
   running: script => running.includes(script),

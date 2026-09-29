@@ -28,6 +28,15 @@ module.exports = {
         }]
       }
     },
+    // The server exited before binding (e.g. missing HF_TOKEN or unaccepted license).
+    {
+      when: "{{!input || !input.event}}",
+      method: "notify",
+      params: {
+        html: "PersonaPlex stopped before the server was ready. Check the terminal output for the error."
+      },
+      next: null
+    },
     // Set the local URL variable for the "Open Web UI" button
     {
       method: "local.set",
