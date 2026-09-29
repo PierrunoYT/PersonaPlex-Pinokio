@@ -30,8 +30,8 @@ class VerifyInstallTests(unittest.TestCase):
             return types.SimpleNamespace(__version__="2.7.0+cu128", version=types.SimpleNamespace(cuda="12.8"))
 
         self.run_check(importer)
-        self.assertIn("moshi.models", imported)
-        self.assertIn("sounddevice", imported)
+        self.assertIn("moshi.server", imported)
+        self.assertNotIn("sounddevice", imported)
 
     def test_missing_native_dependency_invalidates_marker(self):
         def importer(name):
